@@ -244,14 +244,35 @@ function groupByUser(mainArray) {
 }
 const getContactExcel = async (req, res) => {
   try {
-    const jsonData = req.body.data.map((item, index) => ({
+    
+    let jsonData=[]
+  
+for (let g = 0; g < req.body.data.length; g++) {
+  const item = req.body.data[g];
+  
+ 
+  let phoneArr = await contact.getPhoneNos(item.id);
+
+ 
+  
+    jsonData[g] = {
       name: item.name,
-      phone: item.phone,
       location: item.location,
       city: item.city,
       state: item.state,
       User: item.created_by,
-    }));
+      
+    };
+  
+
+
+  
+  phoneArr.forEach((phone, index) => {
+    jsonData[g][`phone${index + 1}`] = phone.mobile_number;
+  });
+}
+
+  
     const result = groupByUser(jsonData);
 
     const workbook = new Excel.Workbook();

@@ -145,6 +145,18 @@ const whereStr=(obj.name.length>0 || obj.state || obj.city || obj.contactPhone |
     });
   });
 };
+
+const getPhoneNos = (id) => {
+  var query = `select mobile_number from contacts_phone_numbers where contacts_id=${id} `;
+  return new Promise((resolve, reject) => {
+    connection.connection.query(query, function (err, res) {
+      if (err) {
+        return resolve(-1);
+      }
+      resolve(JSON.parse(JSON.stringify(res)));
+    });
+  });
+};
 const userNames = () => {
   var query = `select user_name,id from users `;
   return new Promise((resolve, reject) => {
@@ -204,5 +216,5 @@ module.exports = {
   allContacts,
   addNewContact,
   contactInfo,
-  updateContactInfo,remCntctPhone,addCntctPhone
+  updateContactInfo,remCntctPhone,addCntctPhone,getPhoneNos
 };
